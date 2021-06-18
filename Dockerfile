@@ -11,6 +11,7 @@ ARG QUASSEL_RELEASE
 # install build packages
 RUN \
  apk add --no-cache \
+	boost-dev \
 	cmake \
 	curl \
 	dbus-dev \
@@ -25,6 +26,7 @@ RUN \
 	paxmark \
 	qt5-qtbase-dev \
 	qt5-qtscript-dev \
+	qt5-qttools-dev \
 	qt5-qtbase-postgresql \
 	qt5-qtbase-sqlite \
 	qca-dev
@@ -50,7 +52,7 @@ RUN \
  cmake \
 	-DCMAKE_BUILD_TYPE="Release" \
 	-DCMAKE_INSTALL_PREFIX=/usr \
-	-DUSE_QT5=ON \
+	-DCMAKE_INSTALL_LIBDIR=lib \
 	-DWANT_CORE=ON \
 	-DWANT_MONO=OFF \
 	-DWANT_QTCLIENT=OFF \
@@ -85,6 +87,7 @@ RUN \
 
 # copy artifacts build stage
 COPY --from=build-stage /build/quassel/usr/bin/ /usr/bin/
+COPY --from=build-stage /build/quassel/usr/lib/ /usr/lib/
 
 # add local files
 COPY root/ /
